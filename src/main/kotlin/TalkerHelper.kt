@@ -2,6 +2,7 @@ package online.ruin_of_future
 
 import net.mamoe.mirai.console.command.CommandManager
 import net.mamoe.mirai.console.command.CommandSender
+import net.mamoe.mirai.console.plugin.PluginManager.INSTANCE.disable
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescription
 import net.mamoe.mirai.console.plugin.jvm.KotlinPlugin
 import net.mamoe.mirai.event.events.*
@@ -24,12 +25,16 @@ object TalkerHelper : KotlinPlugin(
 
         this.globalEventChannel().filter {
             it is GroupMessageEvent || it is FriendMessageEvent || it is GroupTempMessageEvent
-        }.subscribeAlways<MessageEvent> {
-            val mp = TalkerData.talkerMessage
-            if (mp.containsKey(this.sender.id)) {
-                val contentList = mp[this.sender.id]!!
-                for (msg in this.message) {
-                    contentList.add(msg.contentToString())
+        }.subscribeMessages {
+            matching(Regex("^(?!(\\/(qgjc|talk)( )?(start|end)?))")) {
+                if (this.message.isNotEmpty()) {
+                    val mp = TalkerData.talkerMessage
+                    if (mp.containsKey(this.sender.id)) {
+                        val contentList = mp[this.sender.id]!!
+                        for (msg in this.message) {
+                            contentList.add(msg.contentToString())
+                        }
+                    }
                 }
             }
         }

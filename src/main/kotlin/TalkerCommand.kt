@@ -14,17 +14,18 @@ import kotlin.concurrent.schedule
 object TalkerCommand : CompositeCommand(
     TalkerHelper,
     "qgjc",
+    "talk",
     description = "情感剧场小帮手"
 ) {
     @SubCommand
     suspend fun UserCommandSender.start() {
-        this.sendMessage("开启演讲侦听模式")
         val contentMp = TalkerData.talkerMessage
         val contentStamp = TalkerData.talkerStart
         if (contentMp[this.user.id] != null) {
             this.sendMessage("已经在侦听该演讲者")
             return
         }
+        this.sendMessage("开启演讲侦听模式")
         contentMp[this.user.id] = arrayListOf()
         contentStamp[this.user.id] = System.nanoTime()
 
