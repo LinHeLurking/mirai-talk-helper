@@ -81,11 +81,11 @@ object TalkerCommand : CompositeCommand(
 //                }
 //            }
 //            this.sendMessage("摘要：${summary}")
-//            if (this is MemberCommandSender) {
-//                val fileName: String = "${this.user.nameCardOrNick}_" +
-//                        "${SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(Date())}.txt"
-//                this.group.files.uploadNewFile("./${fileName}", content.toByteArray().toExternalResource())
-//            }
+            if (this is MemberCommandSender) {
+                val fileName: String = "${this.user.nameCardOrNick}_" +
+                        "${SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(Date())}.txt"
+                this.group.files.uploadNewFile("./${fileName}", content.toByteArray().toExternalResource())
+            }
 
             TalkerData.talkerMessage.remove(this.user.id)
             TalkerData.talkerStart.remove(this.user.id)
