@@ -31,7 +31,16 @@ object TalkerHelper : KotlinPlugin(
                 if (mp.containsKey(this.sender.id)) {
                     val contentList = mp[this.sender.id]!!
                     for (msg in this.message) {
-                        contentList.add(msg.contentToString())
+                        val sentence = StringBuilder(msg.toString())
+                        val ending = listOf(".", "。", ",", "，", "!", "！", "?", "？")
+                        var flag = false
+                        for (ch in ending) {
+                            flag = flag || sentence.endsWith(ch)
+                        }
+                        if (!flag) {
+                            sentence.append("。")
+                        }
+                        contentList.add(sentence.toString())
                     }
                 }
             }
