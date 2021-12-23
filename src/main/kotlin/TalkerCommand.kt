@@ -60,31 +60,32 @@ object TalkerCommand : CompositeCommand(
                 sb.append(str)
             }
             val content = sb.toString()
-            val keywordList = HanLP.extractKeyword(content, 5)
+            val keywordList = HanLP.extractKeyword(content, 4)
             val keywordInfo = StringBuilder()
             for (word in keywordList) {
                 keywordInfo.append("$word ")
             }
             this.sendMessage("关键词：${keywordInfo}")
-            val summaryList = HanLP.extractSummary(content, 3)
-            val summary = StringBuilder()
-            for (sentence in summaryList) {
-                summary.append(sentence)
-                val ending = listOf(".", "。", ",", "，", "!", "！", "?", "？")
-                var flag = false
-                for (ch in ending) {
-                    flag = flag || sentence.endsWith(ch)
-                }
-                if (!flag) {
-                    summary.append("。")
-                }
-            }
-            this.sendMessage("摘要：${summary}")
-            if (this is MemberCommandSender) {
-                val fileName: String = "${this.user.nameCardOrNick}_" +
-                        "${SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(Date())}.txt"
-                this.group.files.uploadNewFile("./${fileName}", content.toByteArray().toExternalResource())
-            }
+            // 摘要不是很准确，考虑以后用点更高级的库
+//            val summaryList = HanLP.extractSummary(content, 3)
+//            val summary = StringBuilder()
+//            for (sentence in summaryList) {
+//                summary.append(sentence)
+//                val ending = listOf(".", "。", ",", "，", "!", "！", "?", "？")
+//                var flag = false
+//                for (ch in ending) {
+//                    flag = flag || sentence.endsWith(ch)
+//                }
+//                if (!flag) {
+//                    summary.append("。")
+//                }
+//            }
+//            this.sendMessage("摘要：${summary}")
+//            if (this is MemberCommandSender) {
+//                val fileName: String = "${this.user.nameCardOrNick}_" +
+//                        "${SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(Date())}.txt"
+//                this.group.files.uploadNewFile("./${fileName}", content.toByteArray().toExternalResource())
+//            }
 
             TalkerData.talkerMessage.remove(this.user.id)
             TalkerData.talkerStart.remove(this.user.id)

@@ -25,15 +25,13 @@ object TalkerHelper : KotlinPlugin(
 
         this.globalEventChannel().filter {
             it is GroupMessageEvent || it is FriendMessageEvent || it is GroupTempMessageEvent
-        }.subscribeMessages {
-            matching(Regex("^(?!(\\/(qgjc|talk)( )?(start|end)?))")) {
-                if (this.message.isNotEmpty()) {
-                    val mp = TalkerData.talkerMessage
-                    if (mp.containsKey(this.sender.id)) {
-                        val contentList = mp[this.sender.id]!!
-                        for (msg in this.message) {
-                            contentList.add(msg.contentToString())
-                        }
+        }.subscribeAlways<MessageEvent> {
+            if (this.message.isNotEmpty() && !Regex("(\\/(qgjc|talk)( )?(start|end)?)").matches(this.message.contentToString())) {
+                val mp = TalkerData.talkerMessage
+                if (mp.containsKey(this.sender.id)) {
+                    val contentList = mp[this.sender.id]!!
+                    for (msg in this.message) {
+                        contentList.add(msg.contentToString())
                     }
                 }
             }
